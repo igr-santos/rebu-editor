@@ -1,6 +1,6 @@
 {
   "name": "rebu-editor",
-  "description": "A editor React based on DraftJS framework",
+  "description": "A text-editor React based on DraftJS framework",
   "version": "0.1.0",
   "homepage": "https://ourcities.github.io/rebu-editor",
   "repository": {
