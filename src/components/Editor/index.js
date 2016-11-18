@@ -7,13 +7,17 @@ import {
   getDefaultKeyBinding
 } from 'draft-js';
 
+import Toolbar from '../Toolbar';
+
+import './index.css';
+
 
 class Editor extends Component {
 
   constructor(props) {
     super(props);
 
-    this.state = { editorState: EditorState.createEmpty() };
+    this.state = { editorState: EditorState.createEmpty(), hasFocus: false };
   }
 
   onChange(editorState) {
@@ -31,33 +35,57 @@ class Editor extends Component {
   handleKeyCommand(command) {
     if (command === 'save') {
       // Convert content in RawDraftContentState
+      const { handleSave } = this.props;
       const currentContent = this.state.editorState.getCurrentContent();
-      this.props.onSave(convertToRaw(currentContent))
+
+      handleSave(convertToRaw(currentContent))
       return true
     }
     return false
   }
 
+  focus() {
+    if (!this.props.readOnly) {
+      this.setState({
+        hasFocus: true
+      }, () => setTimeout(() => this.refs.editor.focus()));
+    }
+  }
+
   render() {
+    const editable = !this.props.readOnly && this.state.hasFocus
 
     return (
       <div>
-        <DraftEditor
-          editorState={this.state.editorState}
-          onChange={this.onChange.bind(this)}
-          keyBindingFn={this.keyBindingFn.bind(this)}
-          handleKeyCommand={this.handleKeyCommand.bind(this)}
-        />
+        {!this.props.readOnly ? (
+          <Toolbar
+            editorState={this.state.editorState}
+            onChange={this.onChange.bind(this)}
+            focus={this.focus.bind(this)}
+          />
+        ) : null}
+        {/*<div className="Outside" onClick={() => this.setState({ hasFocus: false })} />*/}
+        <div className="Content" onClick={this.focus.bind(this)}>
+          <DraftEditor
+            ref="editor"
+            editorState={this.state.editorState}
+            onChange={this.onChange.bind(this)}
+            keyBindingFn={this.keyBindingFn.bind(this)}
+            handleKeyCommand={this.handleKeyCommand.bind(this)}
+          />
+          <div className="clearfix"></div>
+        </div>
         {/* Render button save when passed to editor */}
-        {this.props.buttonSave && React.createElement(this.props.buttonSave, { onClick: () => this.handleKeyCommand('save') })}
+        {editable && this.props.buttonSave && React.createElement(this.props.buttonSave, { onClick: () => this.handleKeyCommand('save') })}
       </div>
     );
   }
 }
 
 Editor.propTypes = {
-  onSave: PropTypes.func.isRequired,
+  handleSave: PropTypes.func.isRequired,
   buttonSave: PropTypes.any,
+  readOnly: PropTypes.bool,
 }
 
 export default Editor;

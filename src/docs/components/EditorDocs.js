@@ -9,8 +9,9 @@ const components = [];
 components.push({
   name: 'Editor',
   proptypes: `{
-    onSave: PropTypes.func.isRequired,
-    buttonToSave: PropTypes.any,
+    readOnly: PropTypes.bool,
+    handleSave: PropTypes.func.isRequired,
+    buttonSave: PropTypes.any,
   }`
 });
 
@@ -20,10 +21,10 @@ const examples = [];
 examples.push({
   name: 'Editor - Basic',
   demo: (
-    <Editor onSave={(content) => console.log(content)} />
+    <Editor handleSave={(content) => console.log(content)} />
   ),
   source: `
-    <Editor onSave={(content) => console.log(content)} />
+    <Editor handleSave={(content) => console.log(content)} />
   `
 });
 
@@ -32,13 +33,13 @@ examples.push({
   name: 'Editor - Advanced',
   demo: (
     <Editor
-      onSave={(content) => console.log(content)}
+      handleSave={(content) => console.log(content)}
       buttonSave={(props) => <button {...props}>Save</button>}
     />
   ),
   source: `
     <Editor
-      onSave={(content) => console.log(content)}
+      handleSave={(content) => console.log(content)}
       buttonSave={(props) => <button {...props}>Save</button>}
     />
   `

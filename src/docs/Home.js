@@ -17,7 +17,7 @@ const example = dedent(`
 
   const Example = () => {
     return (
-      <Editor />
+      <Editor handleSave={(content) => console.log(content)} />
     );
   };
 
@@ -60,7 +60,7 @@ const Home = ({title, gh}) => {
               ES6 - import the component you need
             </p>
             <div className="docs-example">
-              <Editor onSave={(content) => console.log(content)} />
+              <Editor handleSave={(content) => console.log(content)} />
             </div>
             <pre>
               <PrismCode className="language-jsx">
