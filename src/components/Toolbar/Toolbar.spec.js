@@ -11,18 +11,32 @@ describe('Toolbar', () => {
     editorState: EditorState.createEmpty(),
     hasFocus: false,
   };
+  const defaultProps = {
+    editorState: state.editorState,
+    onChange: (editorState) => state.editorState = editorState,
+    focus: () => state.hasFocus = true,
+  }
 
   beforeEach(() => {
     toolbar = mount(
-      <Toolbar
-        editorState={state.editorState}
-        onChange={(editorState) => state.editorState = editorState }
-        focus={() => { state.hasFocus = true }}
-      />
+      <Toolbar {...defaultProps} />
     )
   });
 
   it('render without crashing', () => {
     expect(toolbar).not.toBeNull();
+  });
+
+  it('must pass editorState, onChange and focus to children props', () => {
+    const Child = (props) => <div />;
+    toolbar = mount(
+      <Toolbar {...defaultProps}>
+        <Child />
+      </Toolbar>
+    )
+
+    expect(toolbar.find('Child').props().editorState).toEqual(defaultProps.editorState);
+    expect(toolbar.find('Child').props().onChange).toEqual(defaultProps.onChange);
+    expect(toolbar.find('Child').props().focus).toEqual(defaultProps.focus);
   });
 });

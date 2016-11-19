@@ -4,11 +4,11 @@ import React, { Component, PropTypes } from 'react';
 class Toolbar extends Component {
 
   render() {
-    const { children } = this.props;
+    const { children, ...editorProps } = this.props;
 
     return (
       <div className="Toolbar">
-        {children}
+        {children && React.cloneElement(children, { ...editorProps })}
       </div>
     );
   }
