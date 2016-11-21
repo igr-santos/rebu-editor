@@ -32,5 +32,15 @@ describe('RichUtils', () => {
       // check if bold apply
       expect(rawContent.blocks[0].inlineStyleRanges[0].style).toEqual('font-family: Arial;');
     });
+
+    it('must toggle customize inlineStyle in editorState', () => {
+      // Force selection to first word
+      editorState = getEditorStateWithWordSelection(editorState, 0, 'Lorem'.length);
+      editorState = RichUtils.toggleInlineStyle(editorState, 'font-family: Arial;');
+      editorState = RichUtils.toggleInlineStyle(editorState, 'font-family: Courrier New;');
+      const rawContent = convertToRaw(editorState.getCurrentContent());
+      // check if bold apply
+      expect(rawContent.blocks[0].inlineStyleRanges[0].style).toEqual('font-family: Courrier New;');
+    });
   });
 });
